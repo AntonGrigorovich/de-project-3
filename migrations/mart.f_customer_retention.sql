@@ -35,13 +35,14 @@ payment_amount
 from mart.f_sales as f_sales
 inner join mart.d_calendar as d_calendar
 on f_sales.date_id = d_calendar.date_id
-where week_of_year >= date_part('week', current_date)  --- обновляем за текущую неделю
+where week_of_year = date_part('week', DATE '{{ds}}')  --- обновляем за выбранную неделю отчётной даты
 ) X
 left join mart.f_customer_retention Y 
 on X.period_id = Y.period_id 
 and X.item_id = Y.item_id
 where Y.period_id is null
 group by X.period_id, X.item_id;
+
 
 ----Обновление для тех, которые есть (сначала затупил и подумал, что это подразумевалось за инкремент)
 /*
